@@ -54,8 +54,8 @@ print(f"Financial Analysis\n",
     f"Total Months: {month_total}\n",
     f"Total: ${net_total}\n",
     f"Average Change: ${average}\n",
-    f"Greatest Increase in Profits: {greatest_inc[0]} $({greatest_inc[1]})\n",
-    f"Greatest Decrease in Profits: {greatest_dec[0]} $({greatest_dec[1]})")
+    f"Greatest Increase in Profits: {greatest_inc[0]} (${greatest_inc[1]})\n",
+    f"Greatest Decrease in Profits: {greatest_dec[0]} (${greatest_dec[1]})")
 
 # Export analysis to text file
 folder = 'analysis'
@@ -68,6 +68,6 @@ file.write(f"----------------------------\n")
 file.write(f"Total Months: {month_total}\n")
 file.write(f"Total: ${net_total}\n")
 file.write(f"Average Change: ${average}\n")
-file.write(f"Greatest Increase in Profits: {greatest_inc[0]} $({greatest_inc[1]})\n")
-file.write(f"Greatest Decrease in Profits: {greatest_dec[0]} $({greatest_dec[1]})")
+file.write(f"Greatest Increase in Profits: {greatest_inc[0]} (${greatest_inc[1]})\n")
+file.write(f"Greatest Decrease in Profits: {greatest_dec[0]} (${greatest_dec[1]})")
 file.close()
