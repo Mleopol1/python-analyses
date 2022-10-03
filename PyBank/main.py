@@ -6,53 +6,50 @@ csvpath = os.path.join('Resources', 'budget_data.csv')
 
 # Initialize variables
 month_total = 0
-net_total = 0
-month_track = []
-change_list = []
-greatest_inc = ["", 0]
-greatest_dec = ["", 999999999999]
+PL_total = 0
+PL_change = []
+current_month = []
 
 # Read CSV
 with open(csvpath) as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     csv_header = next(csvreader)
 
-    # Get data from first row so header is not calculated in the loop
-    first_row = next(csvreader)
+    # Log first row to exlude header from loop
     month_total += 1
-    net_total += int(first_row[1])
-    # Set current profit/loss as the previous one after totals have been calculated
-    previous_PL = int(first_row[1])
+    first_row = next(csvreader)
+    PL_total += int(first_row[1])
+    previous_row = first_row
 
+    # Loop through each row
     for row in csvreader:
-        # Calculate totals
+
+        # Calculate total months and net total of Profit/Losses
         month_total += 1
-        net_total += int(row[1])
+        PL_total += int(row[1])
 
-        # Track changes in Profits/Losses over the entire period
-        PL_change = int(row[1]) - previous_PL
-        previous_PL = int(row[1])
-        change_list += [PL_change]
-        month_track += [row[0]]
+        # Calculate changes in Profit/Losses between current row and previous row 
+        PL_change.append(int(row[1]) - int(previous_row[1]))
+        current_month.append(row[0])
+        # Reset previous row
+        previous_row = row 
 
-        # Track and record the greatest increase
-        if PL_change > greatest_inc[1]:
-            greatest_inc[0] = row[0]
-            greatest_inc[1] = PL_change
-        
-        # Track and record greatest decrease
-        if PL_change < greatest_dec[1]:
-            greatest_dec[0] = row[0]
-            greatest_dec[1] = PL_change
-        
-        # Calculate Average of Profits/Losses changes
-        average = round(sum(change_list) / (month_total - 1), 2)
+        # Average of those changes
+        average = round((sum(PL_change) / len(PL_change)), 2)
+
+# Calculate greatest increase in profits
+inc_index = PL_change.index(max(PL_change))
+greatest_inc = (current_month[inc_index], max(PL_change))
+
+# Calculate greatest decrease in profits
+dec_index = PL_change.index(min(PL_change))
+greatest_dec = (current_month[dec_index], min(PL_change))
 
 # Print final analysis
 print(f"Financial Analysis\n",
     f"----------------------------\n",
     f"Total Months: {month_total}\n",
-    f"Total: ${net_total}\n",
+    f"Total: ${PL_total}\n",
     f"Average Change: ${average}\n",
     f"Greatest Increase in Profits: {greatest_inc[0]} (${greatest_inc[1]})\n",
     f"Greatest Decrease in Profits: {greatest_dec[0]} (${greatest_dec[1]})")
@@ -66,7 +63,7 @@ file = open(path, 'w')
 file.write(f"Financial Analysis\n")
 file.write(f"----------------------------\n")
 file.write(f"Total Months: {month_total}\n")
-file.write(f"Total: ${net_total}\n")
+file.write(f"Total: ${PL_total}\n")
 file.write(f"Average Change: ${average}\n")
 file.write(f"Greatest Increase in Profits: {greatest_inc[0]} (${greatest_inc[1]})\n")
 file.write(f"Greatest Decrease in Profits: {greatest_dec[0]} (${greatest_dec[1]})")
